@@ -8,8 +8,10 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import sharma.springframework.spring5webapp.model.Author;
 import sharma.springframework.spring5webapp.model.Book;
+import sharma.springframework.spring5webapp.model.Publisher;
 import sharma.springframework.spring5webapp.repositories.AuthorRepository;
 import sharma.springframework.spring5webapp.repositories.BookRepository;
+import sharma.springframework.spring5webapp.repositories.PublisherRepository;
 /*
 
 Both of them provides the same functionality and the only difference between CommandLineRunner and ApplicationRunner is
@@ -24,26 +26,33 @@ public class DevBootstrap implements ApplicationRunner {
 
     private AuthorRepository authorRepository;
     private BookRepository bookRepository;
+    private PublisherRepository publisherRepository;
 
-    public DevBootstrap(AuthorRepository authorRepository, BookRepository bookRepository) {
+    public DevBootstrap(AuthorRepository authorRepository, BookRepository bookRepository, PublisherRepository publisherRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.publisherRepository = publisherRepository;
     }
-//used with ApplicationListener***********************************************
+
+    //used with ApplicationListener***********************************************
 //    @Override
 //    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
 //        initData();
 //    }
     private  void initData(){
         Author kuldeep = new Author("Kuldeep", "Sharma");
-        Book book = new Book("Spring book", "123456", "Sharma Publication");
+        Publisher publisher = new Publisher("Divit Publication","Shyam Nagar");
+        publisherRepository.save(publisher);
+        Book book = new Book("Spring book", "123456", publisher);
         kuldeep.getBooks().add(book);
         book.getAuthors().add(kuldeep);
         authorRepository.save(kuldeep);
         bookRepository.save(book);
 
          kuldeep = new Author("Kuldeep1", "Sharma1");
-         book = new Book("Spring book1", "1234561", "Sharma Publication1");
+         publisher = new Publisher("Raghav Publication","Shyam Nagar");
+         publisherRepository.save(publisher);
+         book = new Book("Spring book1", "1234561", publisher);
          kuldeep.getBooks().add(book);
          book.getAuthors().add(kuldeep);
          authorRepository.save(kuldeep);
